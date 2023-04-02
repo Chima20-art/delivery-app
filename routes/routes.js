@@ -9,7 +9,6 @@ router.post('/post', async (req, res) => {
     try {
         const data = new Model({
             name: req.body.name,
-            age: req.body.age,
         })
         const dataToSave = await data.save()
         res.status(200).json(dataToSave)
@@ -19,8 +18,32 @@ router.post('/post', async (req, res) => {
     }
 })
 
-router.get('/', (req, res) => {
-    res.status(200).send('Api Working....')
+router.get('/getMealById', async (req, res) => {
+    try {
+        const id = req.body.id
+        const mealDoc = await Model.findById(id)
+        res.json(mealDoc)
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+})
+router.get('/getMealByName', async (req, res) => {
+    try {
+        const name = req.body.name
+        const mealDoc = await Model.findOne({ name: name })
+        res.json(mealDoc)
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+})
+router.delete('/deleteById', async (req, res) => {
+    try {
+        const id = req.body.id
+        const data = await Model.findByIdAndDelete(id)
+        res.send(`Document with ${data.name} has been deleted..`)
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
 })
 
 module.exports = router
