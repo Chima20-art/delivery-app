@@ -1,5 +1,5 @@
 const express = require('express')
-const Model = require('../../model/model')
+const Model = require('../model/model')
 
 const router = express.Router()
 
@@ -49,6 +49,19 @@ router.get('/getAll', async (req, res) => {
     try {
         const data = await Model.find()
         res.json(data)
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+})
+router.get('/getRandomMeal', async (req, res) => {
+    try {
+        const data = await Model.find()
+        const date = new Date()
+        const index =
+            (date.getDate() * (date.getMonth() + 1) * date.getFullYear()) %
+            data.length
+
+        res.json(data[index])
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
